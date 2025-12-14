@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
 
 export default function Login() {
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+  });
+
+  const { loading, login } = useLogin();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // hook for handling the login
+    await login(inputs);
+  };
+
   return (
     <div className="min-h-screen bg-cover bg-center flex items-center justify-center p-4">
       {/* Glass Card */}
@@ -10,7 +26,7 @@ export default function Login() {
           Login
         </h2>
 
-        <form action="">
+        <form onSubmit={handleSubmit}>
           {/* Username */}
           <label className="form-control w-full mb-5">
             <div className="label my-2">
@@ -20,6 +36,10 @@ export default function Login() {
               type="text"
               placeholder="your username"
               className="px-2 rounded-s-sm py-0.5 input input-bordered w-full bg-[#0E1A29] border-gray/50 text-white placeholder-white/60 backdrop-blur-md"
+              value={inputs.username}
+              onChange={(e) =>
+                setInputs({ ...inputs, username: e.target.value })
+              }
             />
           </label>
 
@@ -32,19 +52,23 @@ export default function Login() {
               type="password"
               placeholder="••••••••"
               className="px-2 rounded-s-sm py-0.5 input input-bordered w-full bg-[#0E1A29] border-gray/50 text-white placeholder-white/60 backdrop-blur-md"
+              value={inputs.password}
+              onChange={(e) =>
+                setInputs({ ...inputs, password: e.target.value })
+              }
             />
           </label>
 
-          {/* Forgot Password */}
-          <div className="text-right mb-6">
-            <button className="text-sm text-orange-300 hover:text-orange-400 transition cursor-pointer">
-              Forgot password?
-            </button>
-          </div>
-
           {/* Login Button */}
-          <button className="px-2 rounded-s-sm py-0.5 btn btn-primary w-full  font-semibold bg-[#0E1A29] border-gray/50 hover:bg-orange-600 transition cursor-pointer">
-            Login
+          <button
+            className="mt-4 px-2 rounded-s-sm py-0.5 btn btn-primary w-full  font-semibold bg-[#0E1A29] border-gray/50 hover:bg-orange-600 transition cursor-pointer"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Login"
+            )}
           </button>
 
           {/* Divider */}
@@ -55,12 +79,15 @@ export default function Login() {
           </div>
 
           {/* Signup */}
-          <p className="text-center text-white/80">
+          <div className="text-center text-white/80">
             Don’t have an account?{" "}
-            <button className="text-orange-300 hover:text-orange-400 font-medium transition cursor-pointer ">
+            <Link
+              to={"/signup"}
+              className="text-orange-300 hover:text-orange-400 font-medium transition cursor-pointer inline-block "
+            >
               Create one
-            </button>
-          </p>
+            </Link>
+          </div>
         </form>
       </div>
     </div>
