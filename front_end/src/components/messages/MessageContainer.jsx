@@ -5,48 +5,76 @@ import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContex";
+import { useUI } from "../../context/UIContext";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
-  const { socket, onlineUsers } = useSocketContext();
+  const { onlineUsers } = useSocketContext();
+  const { openSidebar } = useUI();
+  const isMobile = useIsMobile();
 
   const isOnline = onlineUsers.includes(selectedConversation?._id);
+
   useEffect(() => {
-    // cleanUp function(unmounts)
     return () => setSelectedConversation(null);
   }, [setSelectedConversation]);
 
   return (
-    <div className="md:min-w-[450px] flex flex-col">
+    <div className="flex-1 w-full flex flex-col overflow-hidden">
       {!selectedConversation ? (
-        <NochatSelected />
+        <div className="relative flex-1 flex items-center justify-center">
+          {isMobile && (
+            <button
+              onClick={openSidebar}
+              className="absolute top-4 left-4 z-10"
+            >
+              ☰
+            </button>
+          )}
+          <NochatSelected />
+        </div>
       ) : (
         <>
           {/* Header */}
-          <div className="bg-[#0b1521] px-4 py-2 mb-2">
-            <span className="label-text">To:</span>{" "}
-            <span className=" font-bold">{selectedConversation.fullName}</span>
-            <p>{isOnline ? "online" : "offline"}</p>
+          <div className="shrink-0 bg-[#0b1521] px-4 py-2 border-b border-slate-700 flex items-center gap-2">
+            {isMobile && (
+              <button onClick={openSidebar}>☰</button>
+            )}
+            <div>
+              <div className="font-bold">
+               {selectedConversation.fullName}
+              </div>
+              <div className="text-sm text-gray-400">
+                {isOnline ? "online" : "offline"}
+              </div>
+            </div>
           </div>
 
-          <Messages />
-          <MessageInput />
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto w-full">
+            <Messages />
+          </div>
+
+          {/* Input */}
+          <div className="shrink-0 w-full">
+            <MessageInput />
+          </div>
         </>
       )}
     </div>
   );
 };
+
 export default MessageContainer;
 
 const NochatSelected = () => {
   const { authUser } = useAuthContext();
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      <div className="px-4 text-center sm:text-lg md:text-xl text-gray-200 font font-semibold flex flex-col items-center gap-2">
-        <p>Welcome {authUser.fullName}</p>
-        <p>select a chat to start messaging</p>
-        <TiMessages className="text-3xl md:text-6xl text-center" />
-      </div>
+    <div className="text-center text-gray-200 font-semibold flex flex-col gap-2">
+      <p>Welcome {authUser.fullName}</p>
+      <p>Select a chat to start messaging</p>
+      <TiMessages className="text-6xl mx-auto" />
     </div>
   );
 };

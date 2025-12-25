@@ -2,7 +2,7 @@ import React from "react";
 import useConversation from "../../zustand/useConversation";
 import { useSocketContext } from "../../context/SocketContex";
 
-const Conversation = ({ conversation, emoji, lastIdx }) => {
+const Conversation = ({ conversation, emoji, lastIdx, onSelect }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const { socket, onlineUsers } = useSocketContext();
 
@@ -15,7 +15,10 @@ const Conversation = ({ conversation, emoji, lastIdx }) => {
           !isSelected ? " hover:bg-[#182738] " : ""
         } rounded-2xl p-2 py-1 cursor-pointer backdrop-blur-2xl shadow-2xl
 		${isSelected ? "bg-[#0E1A29] " : ""}`}
-        onClick={() => setSelectedConversation(conversation)}
+        onClick={() => {
+          setSelectedConversation(conversation);
+          onSelect?.();
+        }}
       >
         <div className={`avatar avatar-${isOnline ? "online" : "offline"}`}>
           <div className="w-12 rounded-full">
