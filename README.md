@@ -47,7 +47,7 @@ ChatAPP/
 │   ├── server.js
 │   └── socket/
 │
-├── frontend/
+├── front_end/
 │   ├── src/
 │   ├── dist/          # Production build
 │   ├── vite.config.js
@@ -94,7 +94,7 @@ npm install
 ### 3️⃣ Install Frontend Dependencies
 
 ```bash
-cd frontend
+cd front_end
 npm install
 ```
 
@@ -106,7 +106,7 @@ npm install
 npm run build
 ```
 
-This will create the `frontend/dist` folder.
+This will create the `front_end/dist` folder.
 
 ---
 
@@ -127,7 +127,7 @@ http://localhost:5000
 ## 🔄 Development Mode (Frontend Only)
 
 ```bash
-cd frontend
+cd front_end
 npm run dev
 ```
 
