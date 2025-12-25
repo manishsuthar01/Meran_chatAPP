@@ -1,13 +1,26 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-body {
+body::before {
+  content: "";
+  position: fixed; /* Keeps it in place */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Use 100% or 100vh here */
+
+  /* Your existing background logic */
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     url("/bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+
+  /* This places it behind your content */
+  z-index: -1;
+
+  /* Important: prevents flickering during scroll */
+  will-change: transform;
 }
 
 /* dark mode looking scrollbar */
